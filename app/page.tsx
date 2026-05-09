@@ -1,18 +1,24 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles, Smartphone, Users, PaintBucket } from "lucide-react";
+import { ArrowRight, Sparkles, Smartphone, Users, PaintBucket, Menu, X } from "lucide-react";
 
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <main className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
       {/* ══════ NAVBAR ══════ */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] glass-panel">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[#121212]/70 backdrop-blur-xl shadow-sm transition-all duration-300">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-gold font-serif text-2xl font-bold tracking-wider">
+            <span className="text-[#D4AF37] font-serif text-2xl font-bold tracking-wider">
               Undanganku
             </span>
           </Link>
-          <div className="flex items-center gap-4">
+          
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-4">
             <Link href="/login" className="text-sm font-medium text-[var(--color-text-muted)] hover:text-white transition-colors">
               Masuk
             </Link>
@@ -20,7 +26,35 @@ export default function Home() {
               Buat Undangan
             </Link>
           </div>
+
+          {/* Mobile Toggle */}
+          <button 
+            className="md:hidden text-[var(--color-text-muted)] hover:text-white p-2 rounded-lg hover:bg-white/5 transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+
+        {/* Mobile Nav Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden absolute top-20 left-0 right-0 bg-[#1a1a1a]/95 backdrop-blur-2xl border-b border-[var(--color-border)] p-6 flex flex-col gap-4 shadow-2xl">
+            <Link 
+              href="/login" 
+              className="text-base font-medium text-[var(--color-text-muted)] hover:text-white transition-colors p-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Masuk
+            </Link>
+            <Link 
+              href="/register" 
+              className="btn-primary w-full justify-center"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Buat Undangan
+            </Link>
+          </div>
+        )}
       </nav>
 
       {/* ══════ HERO ══════ */}
@@ -65,7 +99,7 @@ export default function Home() {
             {[
               {
                 title: "Desain Mewah",
-                desc: "Template eksklusif dengan tipografi premium dan warna yang dapat disesuaikan.",
+                desc: "Template eksklusif dengan tipografi premium.",
                 icon: <PaintBucket className="text-[var(--color-gold-500)]" size={24} />
               },
               {
