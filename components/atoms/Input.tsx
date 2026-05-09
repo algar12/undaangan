@@ -27,8 +27,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               "input-field",
               error && "error",
-              leftAddon && "pl-10",
-              rightAddon && "pr-10",
+              leftAddon && "!pl-11",
+              rightAddon && "!pr-11",
               className
             )}
             {...props}
