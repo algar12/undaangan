@@ -51,7 +51,7 @@ export function DashboardShell({ children, userName }: DashboardShellProps) {
     item.matchExact ? pathname === item.href : pathname.startsWith(item.href);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#121212] text-white font-sans">
+    <div className="min-h-screen flex flex-col bg-transparent text-white font-sans">
       {/* ══════ TOP NAVIGATION (DESKTOP) ══════ */}
       <header className="sticky top-0 z-40 w-full bg-[#1A1A1A]/90 backdrop-blur-xl border-b border-white/10 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">

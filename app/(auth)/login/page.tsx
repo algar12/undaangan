@@ -18,7 +18,7 @@ export default async function LoginPage() {
   if (user) redirect("/dashboard");
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-6 bg-[var(--color-bg)] relative overflow-hidden">
+    <main className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
       {/* Decorative Blobs */}
       <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-[var(--color-primary-light)] blur-[100px] opacity-60 pointer-events-none" />
       <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[var(--color-primary-light)] blur-[100px] opacity-60 pointer-events-none" />

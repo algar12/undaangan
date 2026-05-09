@@ -24,11 +24,26 @@
 }
 
 body {
-  background-color: var(--color-bg);
+  background: radial-gradient(circle at 50% 0%, var(--color-primary-light) 0%, var(--color-bg) 50%, #050505 100%);
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Texture overlay for less monotonous background */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: radial-gradient(rgba(212, 175, 55, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: -1;
 }
 
 h1, h2, h3, h4, h5, h6, .font-serif {

@@ -7,7 +7,7 @@ import { ArrowRight, Sparkles, Smartphone, Users, PaintBucket, Menu, X } from "l
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
-    <main className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
+    <main className="min-h-screen text-[var(--color-text)]">
       {/* ══════ NAVBAR ══════ */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[#121212]/70 backdrop-blur-xl shadow-sm transition-all duration-300">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">

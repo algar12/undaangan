@@ -18,7 +18,7 @@ export default async function RegisterPage() {
   if (user) redirect("/dashboard");
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-6 bg-[var(--color-bg)] relative overflow-hidden">
+    <main className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
       {/* Decorative Blobs */}
       <div className="absolute top-[20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[var(--color-primary-light)] blur-[120px] opacity-60 pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-[var(--color-primary-light)] blur-[120px] opacity-60 pointer-events-none" />
