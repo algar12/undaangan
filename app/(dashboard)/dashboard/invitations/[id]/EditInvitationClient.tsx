@@ -51,6 +51,7 @@ export default function EditInvitationClient({ initialData, invitationId }: Edit
       love_story: initialData.love_story || "",
       gallery_urls: initialData.gallery_urls || [],
       music_url: initialData.music_url || "",
+      cover_image_url: initialData.cover_image_url || "",
       theme_config: initialData.theme_config || DEFAULT_THEME_CONFIG,
       is_published: initialData.is_published,
     },
@@ -76,6 +77,7 @@ export default function EditInvitationClient({ initialData, invitationId }: Edit
       love_story: data.love_story || null,
       gallery_urls: data.gallery_urls || [],
       music_url: data.music_url || null,
+      cover_image_url: data.cover_image_url || null,
       theme_config: data.theme_config ?? DEFAULT_THEME_CONFIG,
       is_published: data.is_published,
     };
@@ -208,6 +210,14 @@ export default function EditInvitationClient({ initialData, invitationId }: Edit
           Media & Galeri
         </h3>
         <div className="flex flex-col gap-8">
+          <FormField label="Foto Sampul / Latar Belakang (Cover Image)" htmlFor="cover_image" hint="Pilih foto utama yang akan ditampilkan pada sampul depan undangan">
+            <ImageUpload 
+              value={watch("cover_image_url") || ""} 
+              onChange={(url) => setValue("cover_image_url", url)} 
+              label="Unggah Foto Sampul"
+            />
+          </FormField>
+
           <FormField label="Lagu Latar (Background Music)" htmlFor="music">
             <AudioUpload 
               value={watch("music_url") || ""} 

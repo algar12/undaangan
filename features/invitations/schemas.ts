@@ -27,6 +27,7 @@ export const createInvitationSchema = z.object({
   love_story: z.string().max(2000, "Maksimal 2000 karakter").optional(),
   gallery_urls: z.array(z.string()).optional(),
   music_url: z.string().optional().nullable(),
+  cover_image_url: z.string().optional().nullable(),
   theme_config: themeConfigSchema.optional(),
 });
 

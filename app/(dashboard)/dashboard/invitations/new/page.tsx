@@ -34,6 +34,7 @@ export default function NewInvitationPage() {
     resolver: zodResolver(createInvitationSchema),
     defaultValues: {
       event_time: "09:00",
+      cover_image_url: "",
       theme_config: DEFAULT_THEME_CONFIG,
     },
   });
@@ -63,6 +64,7 @@ export default function NewInvitationPage() {
       love_story: data.love_story || null,
       gallery_urls: (data as any).gallery_urls || [],
       music_url: (data as any).music_url || null,
+      cover_image_url: (data as any).cover_image_url || null,
       theme_config: data.theme_config ?? DEFAULT_THEME_CONFIG,
     };
 
@@ -193,6 +195,14 @@ export default function NewInvitationPage() {
             Media & Galeri
           </h3>
           <div className="flex flex-col gap-8">
+            <FormField label="Foto Sampul / Latar Belakang (Cover Image)" htmlFor="cover_image" hint="Pilih foto utama yang akan ditampilkan pada sampul depan undangan">
+              <ImageUpload 
+                value={watch("cover_image_url" as any) || ""} 
+                onChange={(url) => setValue("cover_image_url" as any, url)} 
+                label="Unggah Foto Sampul"
+              />
+            </FormField>
+
             <FormField label="Lagu Latar (Background Music)" htmlFor="music" hint="Pilih lagu (MP3) yang akan diputar otomatis saat undangan dibuka">
               <AudioUpload 
                 value={watch("music_url") || ""} 
