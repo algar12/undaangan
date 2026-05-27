@@ -1,20 +1,29 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-// Initialize Supabase Client with Service Role Key to bypass RLS and create/write to buckets.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-// Fallback to anon key if service key is missing
-const supabaseClient = supabaseUrl && (supabaseServiceKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-  ? createClient(supabaseUrl, supabaseServiceKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
-  : null;
-
 export async function POST(request: Request) {
   try {
-    if (!supabaseClient) {
-      throw new Error("Supabase client is not initialized. Check your environment variables.");
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl) {
+      return NextResponse.json(
+        { error: "Environment variable NEXT_PUBLIC_SUPABASE_URL is not defined on Vercel." },
+        { status: 500 }
+      );
     }
+
+    if (!supabaseServiceKey) {
+      return NextResponse.json(
+        { 
+          error: "Environment variable SUPABASE_SERVICE_ROLE_KEY is not defined on Vercel.",
+          details: "Please add SUPABASE_SERVICE_ROLE_KEY in your Vercel Project Settings -> Environment Variables to allow server-side uploads."
+        },
+        { status: 500 }
+      );
+    }
+
+    const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
 
     const formData = await request.formData();
     const files = formData.getAll("files") as File[];
