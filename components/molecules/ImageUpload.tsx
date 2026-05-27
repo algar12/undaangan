@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
 
 interface ImageUploadProps {
   value: string;
@@ -19,24 +20,32 @@ export function ImageUpload({ value, onChange, className, label = "Upload Foto" 
     if (!file) return;
 
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append("files", file);
 
     try {
+      // 1. Dapatkan Signed URL dari API (Melewati batas 4.5MB Vercel)
       const res = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "get-signed-url", filename: file.name, contentType: file.type }),
       });
 
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) throw new Error("Gagal mendapatkan URL unggahan");
 
-      const data = await res.json();
-      if (data.urls && data.urls.length > 0) {
-        onChange(data.urls[0]);
-      }
+      const { signedUrl, token, path, publicUrl } = await res.json();
+
+      // 2. Upload file langsung ke Supabase Storage menggunakan client browser
+      const supabase = createClient();
+      const { error } = await supabase.storage
+        .from("uploads")
+        .uploadToSignedUrl(path, token, file);
+
+      if (error) throw error;
+
+      // 3. Simpan URL publik ke form
+      onChange(publicUrl);
     } catch (error) {
       console.error(error);
-      alert("Gagal mengunggah foto");
+      alert("Gagal mengunggah foto. Pastikan koneksi internet stabil.");
     } finally {
       setIsUploading(false);
       // Reset input

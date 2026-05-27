@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Upload, X, Loader2, ImagePlus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
 
 interface GalleryUploadProps {
   urls: string[];
@@ -18,27 +19,41 @@ export function GalleryUpload({ urls, onChange, className }: GalleryUploadProps)
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append("files", files[i]);
-    }
 
     try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const supabase = createClient();
+      const newUrls: string[] = [];
 
-      if (!res.ok) throw new Error("Upload failed");
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
 
-      const data = await res.json();
-      if (data.urls && data.urls.length > 0) {
-        // Append new URLs to existing ones
-        onChange([...urls, ...data.urls]);
+        // 1. Get Signed URL
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "get-signed-url", filename: file.name, contentType: file.type }),
+        });
+
+        if (!res.ok) throw new Error("Gagal mendapatkan URL unggahan");
+
+        const { signedUrl, token, path, publicUrl } = await res.json();
+
+        // 2. Upload to Supabase Storage
+        const { error } = await supabase.storage
+          .from("uploads")
+          .uploadToSignedUrl(path, token, file);
+
+        if (error) throw error;
+        
+        newUrls.push(publicUrl);
+      }
+
+      if (newUrls.length > 0) {
+        onChange([...urls, ...newUrls]);
       }
     } catch (error) {
       console.error(error);
-      alert("Gagal mengunggah foto galeri");
+      alert("Gagal mengunggah foto galeri. Pastikan koneksi internet stabil.");
     } finally {
       setIsUploading(false);
       e.target.value = "";
