@@ -176,8 +176,31 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 }
 
 /* ============================================================
-   ANIMATIONS
+   ANIMATIONS & TRANSITIONS
    ============================================================ */
+
+/* Base transition for smooth interactions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeUp {
+  0% { 
+    opacity: 0; 
+    transform: translateY(40px) scale(0.98); 
+    filter: blur(4px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 @keyframes floatUp {
   0% { opacity: 0; transform: translateY(30px); }
@@ -196,3 +219,28 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 .animate-pulse-soft {
   animation: pulse-soft 4s ease-in-out infinite;
 }
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.05; transform: scale(1) translate(-50%, -50%); }
+  50% { opacity: 0.15; transform: scale(1.1) translate(-45%, -45%); }
+}
+
+.animate-glow {
+  animation: glow-pulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes slide-in-right {
+  0% { transform: translateX(50px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Stagger delay classes for smoother entry */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }

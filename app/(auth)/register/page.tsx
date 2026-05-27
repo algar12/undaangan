@@ -24,7 +24,7 @@ export default async function RegisterPage() {
       <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-[var(--color-primary-light)] blur-[120px] opacity-60 pointer-events-none" />
 
       <div className="w-full max-w-md relative z-10 py-10">
-        <Link href="/" className="flex flex-col items-center gap-3 mb-8 group hover:scale-105 transition-transform">
+        <Link href="/" className="flex flex-col items-center gap-3 mb-8 group hover:scale-105 transition-transform animate-fade-up">
           <div className="w-14 h-14 rounded-3xl bg-[var(--color-primary-light)] text-[var(--color-primary-dark)] flex items-center justify-center shadow-sm">
             <Heart size={28} fill="currentColor" />
           </div>
@@ -33,7 +33,7 @@ export default async function RegisterPage() {
           </h1>
         </Link>
 
-        <div className="modern-card p-8 sm:p-10">
+        <div className="modern-card p-8 sm:p-10 animate-fade-up delay-100">
           <div className="text-center mb-8">
             <h2 className="font-serif text-2xl font-bold mb-2">Buat Akun Gratis</h2>
             <p className="text-[var(--color-text-muted)] text-sm">
