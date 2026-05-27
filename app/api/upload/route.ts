@@ -112,39 +112,25 @@ export async function POST(request: Request) {
         const { data: { publicUrl } } = supabaseClient.storage.from(bucketName).getPublicUrl(filename);
         uploadedUrls.push(publicUrl);
       } else {
-        // Fallback for image files: Upload to Supabase Storage because Vercel is read-only
-        if (!supabaseClient) {
-          const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-          const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-          if (!supabaseUrl || !supabaseServiceKey) {
-            throw new Error("Supabase environment variables missing.");
-          }
-          supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
-        }
-
-        const bucketName = "uploads";
-        
-        // Ensure bucket exists
-        const { data: buckets } = await supabaseClient.storage.listBuckets();
-        if (!buckets?.some((b: any) => b.name === bucketName)) {
-          await supabaseClient.storage.createBucket(bucketName, { public: true });
-        }
-
+        // Save to local filesystem (public/uploads) as requested by user
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        const fileExt = file.name.split(".").pop() || "";
+        const uploadDir = path.join(process.cwd(), "public", "uploads");
+
+        // Ensure upload directory exists
+        if (!existsSync(uploadDir)) {
+          await mkdir(uploadDir, { recursive: true });
+        }
+
+        // Create unique filename to prevent overwriting
         const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        const filename = `${uniqueSuffix}.${fileExt}`;
+        const filename = `${uniqueSuffix}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+        const filepath = path.join(uploadDir, filename);
 
-        const { error: uploadError } = await supabaseClient.storage
-          .from(bucketName)
-          .upload(filename, buffer, { contentType: file.type, upsert: false });
-
-        if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabaseClient.storage.from(bucketName).getPublicUrl(filename);
-        uploadedUrls.push(publicUrl);
+        await writeFile(filepath, buffer);
+        
+        uploadedUrls.push(`/uploads/${filename}`);
       }
     }
 
